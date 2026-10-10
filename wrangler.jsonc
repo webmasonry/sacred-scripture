@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "assets": {
+    "directory": "./dist",
+  },
+  "compatibility_date": "2026-09-25",
+  "compatibility_flags": ["global_fetch_strictly_public"],
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "name": "sacred-scripture",
+    "observability": {
+    "enabled": true,
+  },
+}

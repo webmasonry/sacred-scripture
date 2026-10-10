@@ -1,0 +1,316 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "assist": {
+    "actions": {
+      "preset": "all",
+      "source": {
+        "noDuplicateClasses": "on",
+        "organizeImports": "on",
+        "useSortedAttributes": "on",
+        "useSortedEnumMembers": "on",
+        "useSortedInterfaceMembers": "on",
+        "useSortedKeys": "on",
+        "useSortedPackageJson": "on",
+        "useSortedProperties": "on",
+        "useSortedSelectionSet": "on",
+        "useSortedTypeFields": "on"
+      }
+    }
+  },
+  "css": {
+    "assist": {
+      "enabled": true
+    },
+    "formatter": {
+      "delimiterSpacing": false,
+      "enabled": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineEnding": "auto",
+      "lineWidth": 80,
+      "quoteStyle": "single",
+      "trailingNewline": true
+    },
+    "globals": [],
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "allowWrongLineComments": true,
+      "cssModules": true,
+      "tailwindDirectives": true
+    }
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**/*.astro",
+      "**/*.css",
+      "**/*.html",
+      "**/*.json",
+      "**/*.svelte",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.vue",
+      "./.vscode/@webmasonry.code-workspace"
+    ]
+  },
+  "formatter": {
+    "attributePosition": "auto",
+    "bracketSameLine": false,
+    "bracketSpacing": true,
+    "delimiterSpacing": false,
+    "enabled": true,
+    "expand": "auto",
+    "formatWithErrors": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "auto",
+    "lineWidth": 80,
+    "trailingNewline": true,
+    "useEditorconfig": false
+  },
+  "html": {
+    "assist": {
+      "enabled": true
+    },
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "attributePosition": "auto",
+      "bracketSameLine": false,
+      "enabled": true,
+      "indentScriptAndStyle": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineEnding": "auto",
+      "lineWidth": 80,
+      "selfCloseVoidElements": "always",
+      "trailingNewline": true,
+      "whitespaceSensitivity": "strict"
+    },
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "interpolation": true,
+      "vue": true
+    }
+  },
+  "javascript": {
+    "assist": {
+      "enabled": true
+    },
+    "experimentalEmbeddedSnippetsEnabled": true,
+    "formatter": {
+      "arrowParentheses": "asNeeded",
+      "attributePosition": "auto",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
+      "delimiterSpacing": false,
+      "enabled": true,
+      "expand": "auto",
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "jsxQuoteStyle": "double",
+      "lineEnding": "auto",
+      "lineWidth": 80,
+      "operatorLinebreak": "after",
+      "quoteProperties": "asNeeded",
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all",
+      "trailingNewline": true
+    }
+  },
+  "json": {
+    "assist": {
+      "enabled": true
+    },
+    "formatter": {
+      "bracketSpacing": true,
+      "delimiterSpacing": false,
+      "enabled": true,
+      "expand": "auto",
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineEnding": "auto",
+      "lineWidth": 80,
+      "trailingCommas": "none",
+      "trailingNewline": true
+    },
+    "linter": {
+      "enabled": true
+    },
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": false
+    }
+  },
+  "linter": {
+    "domains": {
+      "astro": "all",
+      "drizzle": "all",
+      "playwright": "all",
+      "react": "all",
+      "solid": "all",
+      "svelte": "all",
+      "tailwind": "all",
+      "test": "all",
+      "types": "all",
+      "vue": "all"
+    },
+    "enabled": true,
+    "rules": {
+      "a11y": "error",
+      "complexity": "error",
+      "correctness": "error",
+      "nursery": "error",
+      "performance": "error",
+      "preset": "all",
+      "security": "error",
+      "style": "error",
+      "suspicious": "error"
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noTailwindArbitraryValue": {
+              "level": "off"
+            },
+            "noTailwindRawColors": {
+              "level": "off"
+            },
+            "noUndeclaredClasses": {
+              "level": "off"
+            },
+            "useExplicitType": {
+              "level": "off"
+            }
+          },
+          "style": {
+            "useNamingConvention": {
+              "level": "off"
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.css"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "useLayeredStyles": {
+              "level": "error",
+              "options": {
+                "requireImportLayers": false
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.html"]
+    },
+    {
+      "assist": {
+        "actions": {
+          "source": {
+            "useSortedPackageJson": "off"
+          }
+        }
+      },
+      "includes": ["**/*.json"]
+    },
+    {
+      "includes": ["**/*.svelte"]
+    },
+    {
+      "includes": ["**/*.ts"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noImplicitCoercions": {
+              "level": "error",
+              "options": {
+                "allowDoubleNegation": true
+              }
+            }
+          },
+          "correctness": {
+            "noNodejsModules": {
+              "level": "off"
+            },
+            "noUndeclaredDependencies": {
+              "level": "off"
+            },
+            "noUnresolvedImports": {
+              "level": "off"
+            },
+            "useQwikValidLexicalScope": {
+              "level": "off"
+            }
+          },
+          "nursery": {
+            "useExplicitReturnType": {
+              "level": "off"
+            },
+            "useExplicitType": {
+              "level": "off"
+            }
+          },
+          "style": {
+            "noDefaultExport": {
+              "level": "off"
+            },
+            "noMagicNumbers": {
+              "level": "off"
+            },
+            "noNamespace": {
+              "level": "off"
+            },
+            "noProcessEnv": {
+              "level": "off"
+            },
+            "noTernary": {
+              "level": "off"
+            },
+            "useNamingConvention": {
+              "level": "off"
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": {
+              "level": "off"
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.tsx"]
+    },
+    {
+      "includes": ["**/*.vue"]
+    }
+  ],
+  "plugins": [],
+  "root": true,
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
+  }
+}

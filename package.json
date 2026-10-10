@@ -1,17 +1,52 @@
 {
-  "name": "sacred-scripture",
-  "type": "module",
-  "version": "0.0.1",
+  "author": {
+    "email": "webmasonry.github@gmail.com",
+    "name": "Matthew Mason"
+  },
+  "dependencies": {
+    "@webmasonry/astro-css-debugger": "^1.0.1",
+    "astro": "^7.3.8",
+    "drizzle-orm": "^0.45.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@changesets/cli": "^3.0.3",
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^26.6.5",
+    "drizzle-kit": "^0.31.11",
+    "typescript": "6.0.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3",
+    "wrangler": "^4.149.0"
+  },
   "engines": {
     "node": ">=22.12.0"
   },
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+  "name": "@webmasonry/sacred-scripture",
+  "private": true,
+  "repository": {
+    "directory": ".",
+    "type": "git",
+    "url": "git+https://github.com/webmasonry/sacred-scripture.git"
   },
-  "dependencies": {
-    "astro": "^7.3.8"
-  }
+  "scripts": {
+    "astro": "astro",
+    "biome": "biome",
+    "build": "astro build",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "deploy": "pnpm run build && pnpm run migrate-remote && pnpm exec wrangler deploy",
+    "dev": "astro dev",
+    "e2e": "playwright test",
+    "gen-migration": "pnpm exec drizzle-kit generate",
+    "gen-types": "pnpm exec wrangler types",
+    "kill-biomejs": "node ./scripts/kill-biomejs.mjs",
+    "migrate-local": "pnpm run generate-migration && pnpm exec wrangler d1 migrations --local",
+    "migrate-remote": "pnpm run generate-migration && pnpm exec wrangler d1 migrations --remote",
+    "preview": "pnpm run build && pnpm run migrate-local && pnpm exec wrangler dev",
+    "test": "vitest",
+    "wrangler": "wrangler"
+  },
+  "type": "module",
+  "version": "1.0.0"
 }

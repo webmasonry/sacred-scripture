@@ -1,0 +1,224 @@
+{
+  "extensions": {
+    "recommendations": [],
+    "unwantedRecommendations": []
+  },
+  "folders": [
+    {
+      "path": ".."
+    }
+  ],
+  "launch": {
+    "compounds": [
+      {
+        "configurations": ["astro-dev", "astro-browser"],
+        "name": "Astro + Integrated Browser"
+      }
+    ],
+    "configurations": [
+      {
+        "command": "npm run dev",
+        "cwd": "${workspaceFolder}",
+        "name": "astro-dev",
+        "request": "launch",
+        "type": "node-terminal"
+      },
+      {
+        "name": "astro-browser",
+        "request": "launch",
+        "sourceMaps": true,
+        "type": "editor-browser",
+        "url": "http://localhost:4321",
+        "webRoot": "${workspaceFolder}"
+      }
+    ],
+    "version": "0.2.0"
+  },
+  "settings": {
+    "[astro]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[css]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[vue]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+    "autoRestart.fileGlobForESLint": [
+      "**/.eslintrc.{js,cjs,mjs,yaml,yml,json}",
+      "**/.git/HEAD",
+      "**/eslint.config.{js,cjs,mjs}",
+      "**/tools/eslint/**"
+    ],
+    "autoRestart.fileGlobForTypescript": [
+      "**/.git/HEAD",
+      "**/tools/tsconfigs/**",
+      "**/tsconfig.{json,app.json,app.js,js,ts}"
+    ],
+    "biome.enabled": true,
+    "biome.lsp.trace.server": "verbose",
+    "biome.runFromTemporaryLocation": false,
+    "chat.checkpoints.enabled": true,
+    "chat.checkpoints.showFileChanges": true,
+    "chat.editing.autoAcceptDelay": 0,
+    "chat.editing.explainChanges.enabled": true,
+    "chat.editing.openChangedFileInDiffEditor": true,
+    "chat.editing.revealNextChangeOnResolve": true,
+    "chat.tools.compressOutput.enabled": true,
+    "chat.tools.confirmationCarousel.enabled": true,
+    "chat.tools.todos.showWidget": true,
+    "chat.viewSessions.orientation": "stacked",
+    "css.lint.unknownAtRules": "ignore",
+    "editor.codeActionsOnSave": {
+      "source.addMissingImports.ts": "never",
+      "source.addTypeAnnotation": "never",
+      "source.aiTypeAnnotations": "never",
+      "source.biome": "explicit",
+      "source.convertImportFormat": "never",
+      "source.convertImportStar": "never",
+      "source.convertImportToModule": "never",
+      "source.fixAll.biome": "explicit",
+      "source.fixAll.eslint": "never",
+      "source.fixAll.prettier": "never",
+      "source.fixAll.pylance": "never",
+      "source.fixAll.ruff": "never",
+      "source.fixAll.sortJSON": "never",
+      "source.fixAll.ts": "never",
+      "source.optionalMemberAccessAssert": "never",
+      "source.organizeImports.biome": "explicit",
+      "source.organizeImports.ruff": "never",
+      "source.organizeLinkDefinitions": "never",
+      "source.removeUnused.ts": "never",
+      "source.removeUnusedImports": "never",
+      "source.renameShadowedStdlibImports": "never",
+      "source.sort.json": "never",
+      "source.sortImports": "never",
+      "source.unusedImports": "never"
+    },
+    "editor.colorDecorators": true,
+    "editor.detectIndentation": false,
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "editor.formatOnType": false,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "all",
+    "editor.rulers": [80],
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "emmet.includeLanguages": {
+      "astro": "html"
+    },
+    "eslint.enable": false,
+    "eslint.validate": [
+      "astro",
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact"
+    ],
+    "explorer.compactFolders": false,
+    "explorer.confirmDelete": false,
+    "github.copilot.enable": {
+      "*": true,
+      "**/build/**": false,
+      "**/dist/**": false,
+      "**/node_modules/**": false
+    },
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "js/ts.autoClosingTags.enabled": true,
+    "js/ts.format.enabled": true,
+    "js/ts.implementationsCodeLens.enabled": false,
+    "js/ts.implementationsCodeLens.showOnAllClassMethods": false,
+    "js/ts.inlayHints.enumMemberValues.enabled": false,
+    "js/ts.inlayHints.functionLikeReturnTypes.enabled": false,
+    "js/ts.inlayHints.parameterNames.enabled": "none",
+    "js/ts.inlayHints.parameterNames.suppressWhenArgumentMatchesName": false,
+    "js/ts.inlayHints.parameterTypes.enabled": false,
+    "js/ts.inlayHints.propertyDeclarationTypes.enabled": false,
+    "js/ts.inlayHints.variableTypes.enabled": false,
+    "js/ts.inlayHints.variableTypes.suppressWhenTypeMatchesName": false,
+    "js/ts.suggest.autoImports": true,
+    "js/ts.suggest.classMemberSnippets.enabled": true,
+    "js/ts.suggest.enabled": true,
+    "js/ts.suggest.jsdoc.enabled": true,
+    "js/ts.suggest.jsdoc.generateReturns": true,
+    "js/ts.suggestionActions.enabled": true,
+    "js/ts.tsdk.path": "node_modules\\typescript\\lib",
+    "js/ts.updateImportsOnFileMove.enabled": "always",
+    "js/ts.updateImportsOnPaste.enabled": true,
+    "js/ts.validate.enabled": true,
+    "json.schemaDownload.enable": true,
+    "json.schemaDownload.trustedDomains": {
+      "https://biomejs.dev": true,
+      "https://developer.microsoft.com/json-schemas/": true,
+      "https://json-schema.org/": true,
+      "https://json.schemastore.org/": true,
+      "https://raw.githubusercontent.com/devcontainers/spec/": true,
+      "https://raw.githubusercontent.com/microsoft/vscode/": true,
+      "https://schemastore.azurewebsites.net/": true,
+      "https://www.schemastore.org/": true
+    },
+    "prettier.documentSelectors": [
+      "**/*.astro",
+      "**/*.css",
+      "**/*.html",
+      "**/*.js",
+      "**/*.json",
+      "**/*.jsonc",
+      "**/*.jsx",
+      "**/*.md",
+      "**/*.mdx",
+      "**/*.scss",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.vue",
+      "**/*.yaml",
+      "**/*.yml"
+    ],
+    "prettier.enable": false,
+    "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
+    "workbench.colorTheme": "GitHub Dark Colorblind (Beta)",
+    "workbench.iconTheme": "material-icon-theme"
+  },
+  "tasks": {
+    "tasks": [
+      {
+        "args": [
+          "-NoProfile",
+          "-NonInteractive",
+          "-Command",
+          "Stop-Process -Name 'biome' -Force"
+        ],
+        "command": "powershell.exe",
+        "label": "Kill Biome Processes",
+        "presentation": {
+          "clear": false,
+          "echo": true,
+          "focus": false,
+          "panel": "shared",
+          "reveal": "never",
+          "showReuseMessage": false
+        },
+        "problemMatcher": [],
+        "type": "shell"
+      }
+    ],
+    "version": "2.0.0"
+  }
+}

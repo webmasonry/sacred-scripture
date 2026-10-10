@@ -1,0 +1,5 @@
+allowBuilds:
+  "esbuild": true
+  "workerd": true
+minimumReleaseAgeExclude:
+  - '@webmasonry/astro-css-debugger@1.0.1'
