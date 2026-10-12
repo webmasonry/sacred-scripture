@@ -1,4 +1,14 @@
 {
+  "compilerOptions": {
+    "paths": {
+      "@/assets/*": ["./src/assets/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/layouts/*": ["./src/layouts/*"],
+      "@/loaders/*": ["./src/loaders/*"],
+      "@/pages/*": ["./src/pages/*"],
+      "@/styles/*": ["./src/styles/*"]
+    }
+  },
   "exclude": ["dist"],
   "extends": "astro/tsconfigs/strictest",
   "include": ["**/*", ".astro/types.d.ts"]

@@ -23,7 +23,7 @@
     },
     "formatter": {
       "delimiterSpacing": false,
-      "enabled": true,
+      "enabled": false,
       "indentStyle": "space",
       "indentWidth": 2,
       "lineEnding": "auto",
@@ -51,8 +51,7 @@
       "**/*.svelte",
       "**/*.ts",
       "**/*.tsx",
-      "**/*.vue",
-      "./.vscode/@webmasonry.code-workspace"
+      "**/*.vue"
     ]
   },
   "formatter": {
@@ -60,7 +59,7 @@
     "bracketSameLine": false,
     "bracketSpacing": true,
     "delimiterSpacing": false,
-    "enabled": true,
+    "enabled": false,
     "expand": "auto",
     "formatWithErrors": true,
     "indentStyle": "space",
@@ -78,7 +77,7 @@
     "formatter": {
       "attributePosition": "auto",
       "bracketSameLine": true,
-      "enabled": true,
+      "enabled": false,
       "indentScriptAndStyle": true,
       "indentStyle": "space",
       "indentWidth": 2,
@@ -107,7 +106,7 @@
       "bracketSameLine": true,
       "bracketSpacing": true,
       "delimiterSpacing": false,
-      "enabled": true,
+      "enabled": false,
       "expand": "auto",
       "indentStyle": "space",
       "indentWidth": 2,
@@ -129,7 +128,7 @@
     "formatter": {
       "bracketSpacing": true,
       "delimiterSpacing": false,
-      "enabled": true,
+      "enabled": false,
       "expand": "auto",
       "indentStyle": "space",
       "indentWidth": 2,
@@ -201,7 +200,7 @@
             "noUnknownAttribute": {
               "level": "error",
               "options": {
-                "ignore": ["class:list", "set:html"]
+                "ignore": ["class", "class:list", "set:html"]
               }
             }
           }

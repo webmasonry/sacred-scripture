@@ -37,6 +37,9 @@ export default defineConfig({
   ],
   trailingSlash: "always",
   vite: {
+    resolve: {
+      tsconfigPaths: true,
+    },
     build: {
       minify: false,
     },

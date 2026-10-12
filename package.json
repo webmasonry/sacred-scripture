@@ -21,6 +21,7 @@
     "@playwright/test": "^1.64.0",
     "@types/node": "^26.6.5",
     "drizzle-kit": "^0.31.11",
+    "oxlint": "^1.87.0",
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
     "prettier-plugin-tailwindcss": "^0.8.1",

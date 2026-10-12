@@ -1,32 +1,77 @@
 ---
-import "../../../../../styles/global.css";
-import BibleDrawer from "../../../../../components/BibleDrawer.astro";
-import Header from "../../../../../components/Header.astro";
-import NavigationDrawer from "../../../../../components/NavigationDrawer.astro";
-import type { GetStaticPaths } from "astro";
+import "@/styles/global.css";
 import { Font } from "astro:assets";
-import { getCollection } from "astro:content";
+import { getEntry } from "astro:content";
+import type { GetStaticPaths, GetStaticPathsResult } from "astro";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  bookDetails: {
+    chapterCounts: number[];
+    name: string;
+  }[];
+  bookId: number;
+  bookName: string;
+  chapterId: string;
+  translation: "erv" | "hrb";
+  verses: Record<number, string>;
+}
 
 export const prerender = true;
 export const getStaticPaths = (async () => {
-  const hrbBible = await getCollection("hrb-bible");
+  const generatePathsForTranslations = async (
+    translations: ("hrb" | "erv")[],
+  ) => {
+    const pathResults: GetStaticPathsResult = [];
+    for (const translation of translations) {
+      const entry = await getEntry("bible", `${translation}-bible`);
+      if (!entry) continue;
+      const resolveBible = entry.data;
 
-  return [
-    ...hrbBible.flatMap((object) => {
-      const data = object.data;
+      const bookDetails = Object.entries(resolveBible).map(
+        ([name, bookData]) => {
+          const totalChapters =
+            bookData.totalChapterCount || Object.keys(bookData.chapters).length;
+          return {
+            chapterCounts: Array.from(
+              {
+                length: totalChapters,
+              },
+              (_, i) => i + 1,
+            ),
+            name,
+          };
+        },
+      );
 
-      return {
-        params: {
-          book: data.bookName.toLowerCase(),
-          chapter: String(data.chapterId),
-          translation: "hrb",
+      const dynamicPaths = Object.entries(resolveBible).flatMap(
+        ([bookName, book]) => {
+          return Object.keys(book.chapters).map((chapterNum) => {
+            const currentChapter = book.chapters[Number(chapterNum)];
+            return {
+              params: {
+                translation: translation,
+                book: bookName.toLowerCase(),
+                chapter: String(chapterNum),
+              },
+              props: {
+                bookDetails,
+                bookId: book.bookId,
+                bookName: bookName.toLowerCase(),
+                chapterId: String(chapterNum),
+                translation,
+                verses: currentChapter?.verses || {},
+              } satisfies Props,
+            };
+          });
         },
-        props: {
-          data,
-        },
-      };
-    }),
-  ];
+      );
+      pathResults.push(...dynamicPaths);
+    }
+    return pathResults;
+  };
+
+  return await generatePathsForTranslations(["hrb"]);
 }) satisfies GetStaticPaths;
 
 const buttonStyle = [
@@ -36,7 +81,7 @@ const buttonStyle = [
 ];
 ---
 
-<html lang="en" class:list={["dark scrollbar-none"]}>
+<html class="dark scrollbar-none" lang="en">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width" name="viewport" />
@@ -44,102 +89,275 @@ const buttonStyle = [
     <title>Sacred Scripture</title>
     <Font cssVariable="--font-cinzel" preload={true} />
     <Font cssVariable="--font-inter" preload={true} />
+
+    <script is:inline>
+      const theme = (() => {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
+        }
+        return "dark";
+      })();
+
+      if (theme === "light") {
+        document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      }
+    </script>
   </head>
-  <body
-    class:list={[
-      "bg-surface text-ink font-body flex flex-col min-h-svh relative",
-    ]}>
-    <Header buttonStyle={buttonStyle} />
-    <NavigationDrawer buttonStyle={buttonStyle} />
-    <BibleDrawer /> 
-    <main class:list={["flex flex-col p-8"]}>
+  <body class="bg-surface text-ink font-body min-h-svh relative flex flex-col scrollbar-none">
+    <!-- HEADER -->
+    <header class="z-20 fixed top-0 left-0 right-0 shrink-0 flex flex-row items-center justify-center p-2 bg-element border-b border-hairline shadow-xs shadow-accent-brand">
+      <!-- NAVIGATION DRAWER TRIGGER -->
+      <button
+        aria-controls="navigation drawer"
+        aria-expanded="false"
+        aria-pressed="false"
+        data-trigger="navigation drawer"
+        type="button"
+        class:list={[...buttonStyle]}>
+        <Icon name="lucide:menu" />
+      </button>
+
+      <!-- BIBLE DRAWER TRIGGER -->
+      <button
+        aria-controls="bible drawer"
+        aria-expanded="false"
+        aria-pressed="false"
+        data-trigger="bible drawer"
+        type="button"
+        class:list={[...buttonStyle, "ms-auto"]}>
+        <Icon name="bible" />
+      </button>
+    </header>
+
+    <!-- NAVIGATION DRAWER -->
+    <nav
+      aria-label="navigation drawer"
+      data-target="navigation drawer"
+      id="nav-drawer"
+      class:list={[
+        "fixed top-[49px] bottom-0 left-0 h-[calc(100svh-49px)] bg-element z-10 overflow-y-auto p-2 hidden",
+      ]}>
+      <ul class:list={["flex flex-col gap-y-2"]}>
+        {() => {
+          return (
+            <>
+              <li>
+                <a class:list={[...buttonStyle]} href="/">
+                  <Icon name="home" />
+                </a>
+              </li>
+              <li>
+                <button
+                  aria-label="Toggle search"
+                  aria-pressed="false"
+                  class:list={[...buttonStyle]}
+                  data-trigger="search toggle"
+                  type="button">
+                  <Icon name="search" />
+                </button>
+              </li>
+              <li>
+                <button
+                  aria-label="Toggle bookmark"
+                  aria-pressed="false"
+                  class:list={[...buttonStyle]}
+                  data-trigger="bookmark toggle"
+                  type="button">
+                  <Icon name="bookmark" />
+                </button>
+              </li>
+              <li>
+                <button
+                  aria-label="Toggle dark theme"
+                  aria-pressed="false"
+                  class:list={[...buttonStyle]}
+                  data-trigger="theme toggle"
+                  type="button">
+                  <span
+                    aria-hidden="true"
+                    class:list={["hidden"]}
+                    data-trigger="theme light">
+                    <Icon name="lucide:moon" />
+                  </span>
+                  <span
+                    aria-hidden="false"
+                    class:list={[""]}
+                    data-trigger="theme dark">
+                    <Icon name="lucide:sun" />
+                  </span>
+                </button>
+              </li>
+            </>
+          );
+        }}
+      </ul>
+    </nav>
+
+    <!-- MAIN CONTENT-->
+    <main class:list={["flex-1 bg-surface z-0 p-6 pt-[calc(24px+49px)]"]}>
       <div class:list={["border-b border-hairline"]}>
         <h1 class:list={["font-cinzel text-ink text-3xl"]}>
-          {Astro.props.data.bookName} {Astro.props.data.chapterId}
+          {Astro.props.bookName} {Astro.props.chapterId}
         </h1>
       </div>
+
       <div class:list={["flex flex-col gap-y-3 py-4"]}>
-        {Object.entries(Astro.props.data.verses).map(([verseNum, verse]) => {
-          return (
-            <p class:list={["font-scripture text-ink"]}>
-              <span class:list={["text-subtle underline inline mr-2"]}>
-                Gen {Astro.props.data.bookId}:{verseNum}
-              </span>
-              <span class:list={["inline"]} set:html={verse} />
-            </p>
-          );
-        })}
+        {Astro.props.verses &&
+          Object.entries(Astro.props.verses).map(([verseNum, verse]) => {
+            return (
+              <p class:list={["font-scripture text-ink"]}>
+                <span class:list={["text-subtle underline inline mr-2"]}>
+                  Gen {Astro.props.bookId}:{verseNum}
+                </span>
+                <span class:list={["inline"]} set:html={verse} />
+              </p>
+            );
+          })}
       </div>
     </main>
+
+    <!-- BIBLE DRAWER -->
+    <aside
+      aria-label="Bible Drawer"
+      data-target="bible drawer"
+      id="bible-drawer"
+      role="dialog"
+      class:list={[
+        "fixed top-[49px] bottom-0 h-[calc(100svh-49px)] bg-element z-10 overflow-y-auto flex-col gap-y-2 w-full scrollbar-none hidden",
+      ]}>
+      <h1
+        class:list={[
+          "font-cinzel text-ink text-2xl border-b border-hairline pt-2.5 pb-1 px-2 z-10 shadow shadow-accent-muted",
+        ]}>
+        Book
+      </h1>
+      <ul class:list={["flex flex-col gap-y-2 z-0"]}>
+        {Astro.props.bookDetails.map(({ chapterCounts, name }) => {
+          return (
+            <li class="w-full shadow shadow-accent-muted/50">
+              <details class="group w-full">
+                <summary class="flex items-center justify-between cursor-pointer list-none p-2 text-lg font-cinzel text-ink select-none">
+                  <span>{name}</span>
+                  <span class="transition-transform duration-200 group-open:rotate-180">
+                    <Icon name="lucide:chevron-down" />
+                  </span>
+                </summary>
+
+                <div class="px-2 pb-3 pt-1 text-sm bg-accent-muted/10 border-t border-accent-muted/20 flex flex-wrap gap-2">
+                  {chapterCounts.map((count) => {
+                    const href = `/reader/${Astro.props.translation}/${name.toLowerCase()}/${count}/`;
+                    return (
+                      <a
+                        class:list={
+                          "px-2 py-1 bg-accent-muted/20 rounded size-8 flex justify-center items-center"
+                        }
+                        href={href}>
+                        {count}
+                      </a>
+                    );
+                  })}
+                </div>
+              </details>
+            </li>
+          );
+        })}
+      </ul>
+    </aside>
   </body>
 </html>
 
 <script>
-  // Elements
-  const bibleBtn = document.querySelector(
-    'button[data-trigger="bible drawer"]',
-  );
-  const bibleDrawer = document.querySelector('div[data-target="bible drawer"]');
-  const navigationBtn = document.querySelector(
-    'button[data-trigger="navigation drawer"]',
-  );
-  const navigationDrawer = document.querySelector(
-    'nav[data-target="navigation drawer"]',
-  );
-  const themeBtn = document.querySelector(
-    'button[data-trigger="theme toggle"]',
-  );
-  const themeLightElement = document.querySelector(
-    'span[data-trigger="theme light"]',
-  );
-  const themeDarkElement = document.querySelector(
-    'span[data-trigger="theme dark"]',
-  );
+  const elements = {
+    bibleBtn: document.querySelector('[data-trigger="bible drawer"]'),
+    bibleDrawer: document.querySelector('[data-target="bible drawer"]'),
+    navigationBtn: document.querySelector('[data-trigger="navigation drawer"]'),
+    navigationDrawer: document.querySelector(
+      'nav[data-target="navigation drawer"]',
+    ),
+    themeBtn: document.querySelector('[data-trigger="theme toggle"]'),
+    themeLightElement: document.querySelector('[data-trigger="theme light"]'),
+    themeDarkElement: document.querySelector('[data-trigger="theme dark"]'),
+  };
 
   // Helper function to handle aria states cleanly
   function updateAriaStates() {
-    if (bibleBtn && bibleDrawer) {
-      const isHidden = bibleDrawer.classList.contains("hidden");
-      bibleBtn.setAttribute("aria-expanded", (!isHidden).toString());
-      bibleBtn.setAttribute("aria-pressed", (!isHidden).toString());
+    if (elements.bibleBtn && elements.bibleDrawer) {
+      const isHidden = elements.bibleDrawer.classList.contains("hidden");
+      elements.bibleBtn.setAttribute("aria-expanded", (!isHidden).toString());
+      elements.bibleBtn.setAttribute("aria-pressed", (!isHidden).toString());
     }
 
-    if (navigationBtn && navigationDrawer) {
-      const isHidden = navigationDrawer.classList.contains("hidden");
-      navigationBtn.setAttribute("aria-expanded", (!isHidden).toString());
-      navigationBtn.setAttribute("aria-pressed", (!isHidden).toString());
+    if (elements.navigationBtn && elements.navigationDrawer) {
+      const isHidden = elements.navigationDrawer.classList.contains("hidden");
+      elements.navigationBtn.setAttribute(
+        "aria-expanded",
+        (!isHidden).toString(),
+      );
+      elements.navigationBtn.setAttribute(
+        "aria-pressed",
+        (!isHidden).toString(),
+      );
     }
   }
 
   // Bible toggle logic
-  if (bibleBtn && bibleDrawer) {
-    bibleBtn.addEventListener("click", () => {
+  if (elements.bibleBtn && elements.bibleDrawer) {
+    elements.bibleBtn.addEventListener("click", () => {
       // Close navigation drawer if open
-      if (navigationDrawer && !navigationDrawer.classList.contains("hidden")) {
-        navigationDrawer.classList.add("hidden");
+      if (
+        elements.navigationDrawer &&
+        !elements.navigationDrawer.classList.contains("hidden")
+      ) {
+        elements.navigationDrawer.classList.add("hidden");
       }
 
-      bibleDrawer.classList.toggle("hidden");
+      if (elements.bibleDrawer) {
+        if (elements.bibleDrawer.classList.contains("hidden")) {
+          elements.bibleDrawer.classList.remove("hidden");
+          elements.bibleDrawer.classList.add("flex");
+        } else {
+          elements.bibleDrawer.classList.remove("flex");
+          elements.bibleDrawer.classList.add("hidden");
+        }
+      }
+
       updateAriaStates();
     });
   }
 
   // Navigation toggle logic
-  if (navigationBtn && navigationDrawer) {
-    navigationBtn.addEventListener("click", () => {
+  if (elements.navigationBtn && elements.navigationDrawer) {
+    elements.navigationBtn.addEventListener("click", () => {
       // Close bible drawer if open
-      if (bibleDrawer && !bibleDrawer.classList.contains("hidden")) {
-        bibleDrawer.classList.add("hidden");
+      if (
+        elements.bibleDrawer &&
+        !elements.bibleDrawer.classList.contains("hidden")
+      ) {
+        elements.bibleDrawer.classList.add("hidden");
       }
 
-      navigationDrawer.classList.toggle("hidden");
+      if (elements.navigationDrawer) {
+        elements.navigationDrawer.classList.toggle("hidden");
+      }
+
       updateAriaStates();
     });
   }
 
   // Theme toggle logic
-  if (themeBtn && themeLightElement && themeDarkElement) {
-    themeBtn.addEventListener("click", () => {
+  if (
+    elements.themeBtn &&
+    elements.themeLightElement &&
+    elements.themeDarkElement
+  ) {
+    elements.themeBtn.addEventListener("click", () => {
       const currentTheme = window.localStorage.getItem("theme");
 
       const applyTheme = (theme: "light" | "dark") => {
@@ -166,15 +384,32 @@ const buttonStyle = [
         // If no theme is set, default to dark
         window.localStorage.setItem("theme", "dark");
         applyTheme("dark");
-        swapElementVisibility(themeDarkElement, themeLightElement);
+
+        if (elements.themeDarkElement && elements.themeLightElement) {
+          swapElementVisibility(
+            elements.themeDarkElement,
+            elements.themeLightElement,
+          );
+        }
       } else {
         // If a theme is already set, toggle between light and dark
         if (currentTheme === "dark") {
           window.localStorage.setItem("theme", "light");
-          swapElementVisibility(themeLightElement, themeDarkElement);
+
+          if (elements.themeDarkElement && elements.themeLightElement) {
+            swapElementVisibility(
+              elements.themeLightElement,
+              elements.themeDarkElement,
+            );
+          }
         } else {
           window.localStorage.setItem("theme", "dark");
-          swapElementVisibility(themeDarkElement, themeLightElement);
+          if (elements.themeDarkElement && elements.themeLightElement) {
+            swapElementVisibility(
+              elements.themeDarkElement,
+              elements.themeLightElement,
+            );
+          }
         }
 
         // Apply the new theme immediately

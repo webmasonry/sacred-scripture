@@ -1,19 +1,19 @@
 {
   "extensions": {
     "recommendations": [],
-    "unwantedRecommendations": []
+    "unwantedRecommendations": [],
   },
   "folders": [
     {
-      "path": ".."
-    }
+      "path": "..",
+    },
   ],
   "launch": {
     "compounds": [
       {
         "configurations": ["astro-dev", "astro-browser"],
-        "name": "Astro + Integrated Browser"
-      }
+        "name": "Astro + Integrated Browser",
+      },
     ],
     "configurations": [
       {
@@ -21,7 +21,7 @@
         "cwd": "${workspaceFolder}",
         "name": "astro-dev",
         "request": "launch",
-        "type": "node-terminal"
+        "type": "node-terminal",
       },
       {
         "name": "astro-browser",
@@ -29,48 +29,48 @@
         "sourceMaps": true,
         "type": "editor-browser",
         "url": "http://localhost:4321",
-        "webRoot": "${workspaceFolder}"
-      }
+        "webRoot": "${workspaceFolder}",
+      },
     ],
-    "version": "0.2.0"
+    "version": "0.2.0",
   },
   "settings": {
     "[astro]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[css]": {
-      "editor.defaultFormatter": "biomejs.biome"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[javascript]": {
-      "editor.defaultFormatter": "biomejs.biome"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[json]": {
-      "editor.defaultFormatter": "biomejs.biome"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[jsonc]": {
-      "editor.defaultFormatter": "biomejs.biome"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[typescript]": {
-      "editor.defaultFormatter": "biomejs.biome"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[typescriptreact]": {
-      "editor.defaultFormatter": "biomejs.biome"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[vue]": {
-      "editor.defaultFormatter": "biomejs.biome"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "autoRestart.fileGlobForESLint": [
       "**/.eslintrc.{js,cjs,mjs,yaml,yml,json}",
       "**/.git/HEAD",
       "**/eslint.config.{js,cjs,mjs}",
-      "**/tools/eslint/**"
+      "**/tools/eslint/**",
     ],
     "autoRestart.fileGlobForTypescript": [
       "**/.git/HEAD",
       "**/tools/tsconfigs/**",
-      "**/tsconfig.{json,app.json,app.js,js,ts}"
+      "**/tsconfig.{json,app.json,app.js,js,ts}",
     ],
-    "biome.enabled": false,
+    "biome.enabled": true,
     "biome.lsp.trace.server": "verbose",
     "biome.runFromTemporaryLocation": false,
     "chat.checkpoints.enabled": true,
@@ -108,7 +108,7 @@
       "source.renameShadowedStdlibImports": "never",
       "source.sort.json": "never",
       "source.sortImports": "never",
-      "source.unusedImports": "never"
+      "source.unusedImports": "never",
     },
     "editor.colorDecorators": true,
     "editor.detectIndentation": false,
@@ -120,9 +120,10 @@
     "editor.renderWhitespace": "all",
     "editor.rulers": [80],
     "editor.tabSize": 2,
-    "editor.wordWrap": "on",
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80,
     "emmet.includeLanguages": {
-      "astro": "html"
+      "astro": "html",
     },
     "eslint.enable": false,
     "eslint.validate": [
@@ -130,7 +131,7 @@
       "javascript",
       "javascriptreact",
       "typescript",
-      "typescriptreact"
+      "typescriptreact",
     ],
     "explorer.compactFolders": false,
     "explorer.confirmDelete": false,
@@ -138,7 +139,7 @@
       "*": true,
       "**/build/**": false,
       "**/dist/**": false,
-      "**/node_modules/**": false
+      "**/node_modules/**": false,
     },
     "github.copilot.nextEditSuggestions.enabled": true,
     "js/ts.autoClosingTags.enabled": true,
@@ -172,7 +173,7 @@
       "https://raw.githubusercontent.com/devcontainers/spec/": true,
       "https://raw.githubusercontent.com/microsoft/vscode/": true,
       "https://schemastore.azurewebsites.net/": true,
-      "https://www.schemastore.org/": true
+      "https://www.schemastore.org/": true,
     },
     "prettier.documentSelectors": [
       "**/*.astro",
@@ -189,13 +190,13 @@
       "**/*.tsx",
       "**/*.vue",
       "**/*.yaml",
-      "**/*.yml"
+      "**/*.yml",
     ],
     "prettier.enable": true,
     "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
     "window.zoomLevel": 1.2,
     "workbench.colorTheme": "GitHub Dark Colorblind (Beta)",
-    "workbench.iconTheme": "material-icon-theme"
+    "workbench.iconTheme": "material-icon-theme",
   },
   "tasks": {
     "tasks": [
@@ -204,7 +205,7 @@
           "-NoProfile",
           "-NonInteractive",
           "-Command",
-          "Stop-Process -Name 'biome' -Force"
+          "Stop-Process -Name 'biome' -Force",
         ],
         "command": "powershell.exe",
         "label": "Kill Biome Processes",
@@ -214,12 +215,12 @@
           "focus": false,
           "panel": "shared",
           "reveal": "never",
-          "showReuseMessage": false
+          "showReuseMessage": false,
         },
         "problemMatcher": [],
-        "type": "shell"
-      }
+        "type": "shell",
+      },
     ],
-    "version": "2.0.0"
-  }
+    "version": "2.0.0",
+  },
 }

@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 .dark {
   --accent-brand: #3b82f6;
@@ -11,13 +11,21 @@
 }
 
 .light {
-  --accent-brand: #0052cc;
+  /* --accent-brand: #0052cc;
   --accent-muted: #e6f0fa;
   --hairline: #e2e8f0;
   --element: #f4f5f6;
   --surface: #fdfdfd;
   --ink: #111111;
-  --subtle: #666666;
+  --subtle: #666666; */
+
+  --accent-brand: #7792dd;
+  --accent-muted: #eff6ff;
+  --hairline: #1f3962;
+  --element: #f8fafc;
+  --surface: #fafafa;
+  --ink: #0f172a;
+  --subtle: #64748b;
 }
 
 @theme inline {
@@ -49,5 +57,5 @@
   --font-cinzel: var(--font-cinzel);
 
   /* Font for scripture */
-  --font-scripture: Georgia, 'Times New Roman', serif;
+  --font-scripture: Georgia, "Times New Roman", serif;
 }
