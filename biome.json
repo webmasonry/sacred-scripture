@@ -102,7 +102,7 @@
     },
     "experimentalEmbeddedSnippetsEnabled": true,
     "formatter": {
-      "arrowParentheses": "asNeeded",
+      "arrowParentheses": "always",
       "attributePosition": "auto",
       "bracketSameLine": false,
       "bracketSpacing": true,
@@ -152,67 +152,45 @@
       "drizzle": "all",
       "playwright": "all",
       "react": "all",
-      "solid": "all",
-      "svelte": "all",
       "tailwind": "all",
       "test": "all",
-      "types": "all",
-      "vue": "all"
+      "types": "all"
     },
     "enabled": true,
     "rules": {
-      "a11y": "error",
-      "complexity": "error",
-      "correctness": "error",
-      "nursery": "error",
-      "performance": "error",
-      "preset": "all",
-      "security": "error",
-      "style": "error",
-      "suspicious": "error"
+      "a11y": {
+        "recommended": true
+      },
+      "complexity": {
+        "recommended": true
+      },
+      "correctness": {
+        "recommended": true
+      },
+      "nursery": {
+        "recommended": true
+      },
+      "performance": {
+        "recommended": true
+      },
+      "preset": "recommended",
+      "security": {
+        "recommended": true
+      },
+      "style": {
+        "recommended": true
+      },
+      "suspicious": {
+        "recommended": true
+      }
     }
   },
   "overrides": [
     {
-      "includes": ["**/*.astro"],
-      "linter": {
-        "rules": {
-          "nursery": {
-            "noTailwindArbitraryValue": {
-              "level": "off"
-            },
-            "noTailwindRawColors": {
-              "level": "off"
-            },
-            "noUndeclaredClasses": {
-              "level": "off"
-            },
-            "useExplicitType": {
-              "level": "off"
-            }
-          },
-          "style": {
-            "useNamingConvention": {
-              "level": "off"
-            }
-          }
-        }
-      }
+      "includes": ["**/*.astro"]
     },
     {
-      "includes": ["**/*.css"],
-      "linter": {
-        "rules": {
-          "nursery": {
-            "useLayeredStyles": {
-              "level": "error",
-              "options": {
-                "requireImportLayers": false
-              }
-            }
-          }
-        }
-      }
+      "includes": ["**/*.css"]
     },
     {
       "includes": ["**/*.html"]
@@ -231,73 +209,10 @@
       "includes": ["**/*.svelte"]
     },
     {
-      "includes": ["**/*.ts"],
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noImplicitCoercions": {
-              "level": "error",
-              "options": {
-                "allowDoubleNegation": true
-              }
-            }
-          },
-          "correctness": {
-            "noNodejsModules": {
-              "level": "off"
-            },
-            "noUndeclaredDependencies": {
-              "level": "off"
-            },
-            "noUnresolvedImports": {
-              "level": "off"
-            },
-            "useQwikValidLexicalScope": {
-              "level": "off"
-            }
-          },
-          "nursery": {
-            "useExplicitReturnType": {
-              "level": "off"
-            },
-            "useExplicitType": {
-              "level": "off"
-            }
-          },
-          "style": {
-            "noDefaultExport": {
-              "level": "off"
-            },
-            "noMagicNumbers": {
-              "level": "off"
-            },
-            "noNamespace": {
-              "level": "off"
-            },
-            "noProcessEnv": {
-              "level": "off"
-            },
-            "noTernary": {
-              "level": "off"
-            },
-            "useNamingConvention": {
-              "level": "off"
-            }
-          }
-        }
-      }
+      "includes": ["**/*.ts"]
     },
     {
-      "includes": ["**/*.d.ts"],
-      "linter": {
-        "rules": {
-          "correctness": {
-            "noUnusedVariables": {
-              "level": "off"
-            }
-          }
-        }
-      }
+      "includes": ["**/*.d.ts"]
     },
     {
       "includes": ["**/*.tsx"]

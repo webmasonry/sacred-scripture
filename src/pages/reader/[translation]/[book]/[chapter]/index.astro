@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+import type { GetStaticPaths } from "astro";
+
+export const prerender = true;
+export const getStaticPaths = (async () => {
+  const hrb = await getCollection("hrb");
+  console.log(hrb);
+
+  return [
+    {
+      params: {
+        book: "1",
+        chapter: "1",
+        translation: "hrb",
+      },
+      props: {
+        data: {},
+      },
+    },
+  ];
+}) satisfies GetStaticPaths;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width" name="viewport" />
+    <meta content={Astro.generator} name="generator" />
+    <title>Verse</title>
+  </head>
+  <body>
+    <pre>{JSON.stringify(Astro.props.data, null, 2)}</pre>
+  </body>
+</html>
