@@ -77,7 +77,7 @@
     "experimentalFullSupportEnabled": true,
     "formatter": {
       "attributePosition": "auto",
-      "bracketSameLine": false,
+      "bracketSameLine": true,
       "enabled": true,
       "indentScriptAndStyle": true,
       "indentStyle": "space",
@@ -187,7 +187,19 @@
   },
   "overrides": [
     {
-      "includes": ["**/*.astro"]
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noUnknownAttribute": {
+              "level": "error",
+              "options": {
+                "ignore": ["class:list", "set:html"]
+              }
+            }
+          }
+        }
+      }
     },
     {
       "includes": ["**/*.css"]

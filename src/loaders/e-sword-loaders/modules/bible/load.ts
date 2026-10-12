@@ -18,10 +18,10 @@ function loadByBook(
   file: ESwordFile,
   store: DataStore,
 ): void {
-  for (const chapter of data) {
+  for (const book of data) {
     store.set({
-      data: chapter,
-      id: `${file.name}-${chapter.bookName}`,
+      data: book,
+      id: `${file.name}-${book.bookName}`,
     });
   }
 }
@@ -34,7 +34,7 @@ function loadByChapter(
   for (const chapter of data) {
     store.set({
       data: chapter,
-      id: `${file.name}-${chapter.bookName}`,
+      id: `${file.name}-${chapter.bookName}-${chapter.chapterId}`,
     });
   }
 }

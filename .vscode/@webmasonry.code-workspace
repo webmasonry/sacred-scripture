@@ -17,7 +17,7 @@
     ],
     "configurations": [
       {
-        "command": "npm run dev",
+        "command": "pnpm run dev",
         "cwd": "${workspaceFolder}",
         "name": "astro-dev",
         "request": "launch",

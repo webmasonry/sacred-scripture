@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+
+.dark {
+  --accent-brand: #3b82f6;
+  --accent-muted: #1e293b;
+  --hairline: #222226;
+  --element: #16161a;
+  --surface: #0f0f11;
+  --ink: #ececed;
+  --subtle: #94a3b8;
+}
+
+.light {
+  --accent-brand: #0052cc;
+  --accent-muted: #e6f0fa;
+  --hairline: #e2e8f0;
+  --element: #f4f5f6;
+  --surface: #fdfdfd;
+  --ink: #111111;
+  --subtle: #666666;
+}
+
+@theme inline {
+  /* Primary brand color for links, focus states, and prominent actions. */
+  --color-accent-brand: var(--accent-brand);
+
+  /* Low-emphasis brand tint for selected or highlighted backgrounds. */
+  --color-accent-muted: var(--accent-muted);
+
+  /* Raised component background, such as cards, controls, or panels. */
+  --color-element: var(--element);
+
+  /* Base page and main content background. */
+  --color-surface: var(--surface);
+
+  /* Subtle outlines and dividers between nearby elements. */
+  --color-hairline: var(--hairline);
+
+  /* Default foreground color for primary text and icons. */
+  --color-ink: var(--ink);
+
+  /* Secondary text and lower-emphasis interface details. */
+  --color-subtle: var(--subtle);
+
+  /* Font for body text. */
+  --font-body: var(--font-inter);
+
+  /* Font for headings and decorative text. */
+  --font-cinzel: var(--font-cinzel);
+
+  /* Font for scripture */
+  --font-scripture: Georgia, 'Times New Roman', serif;
+}
+
+@layer components {
+  .navigation {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    width: var(--sidebar-w);
+    padding: 12px 0;
+    background: var(--bg-element);
+    border-right: 1px solid var(--border-hairline);
+  }
+}
