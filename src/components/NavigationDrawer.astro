@@ -1,0 +1,70 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  buttonStyle: string[];
+}
+
+const { buttonStyle } = Astro.props;
+---
+
+<nav
+  aria-label="Primary Navigation"
+  data-target="navigation drawer"
+  id="nav-drawer"
+  class:list={["fixed top-[49px] left-0 z-50 bg-elementc hidden h-full p-2"]}>
+  <ul class:list={["flex flex-col gap-y-2"]}>
+    {() => {
+      return (
+        <>
+          <li>
+            <a class:list={[...buttonStyle]} href="/">
+              <Icon name="home" />
+            </a>
+          </li>
+          <li>
+            <button
+              aria-label="Toggle search"
+              aria-pressed="false"
+              class:list={[...buttonStyle]}
+              data-trigger="search toggle"
+              type="button">
+              <Icon name="search" />
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="Toggle bookmark"
+              aria-pressed="false"
+              class:list={[...buttonStyle]}
+              data-trigger="bookmark toggle"
+              type="button">
+              <Icon name="bookmark" />
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="Toggle dark theme"
+              aria-pressed="false"
+              class:list={[...buttonStyle]}
+              data-trigger="theme toggle"
+              type="button">
+              <span
+                aria-hidden="true"
+                class:list={["hidden"]}
+                data-trigger="theme light">
+                <Icon name="lucide:moon" />
+              </span>
+              <span
+                aria-hidden="false"
+                class:list={[""]}
+                data-trigger="theme dark">
+                <Icon name="lucide:sun" />
+              </span>
+            </button>
+          </li>
+        </>
+      );
+    }}
+  </ul>
+</nav>

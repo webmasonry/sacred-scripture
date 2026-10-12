@@ -51,17 +51,3 @@
   /* Font for scripture */
   --font-scripture: Georgia, 'Times New Roman', serif;
 }
-
-@layer components {
-  .navigation {
-    display: flex;
-    flex-shrink: 0;
-    flex-direction: row;
-    gap: 4px;
-    align-items: center;
-    width: var(--sidebar-w);
-    padding: 12px 0;
-    background: var(--bg-element);
-    border-right: 1px solid var(--border-hairline);
-  }
-}

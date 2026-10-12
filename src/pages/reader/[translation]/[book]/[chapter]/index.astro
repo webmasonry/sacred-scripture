@@ -1,9 +1,11 @@
 ---
 import "../../../../../styles/global.css";
+import BibleDrawer from "../../../../../components/BibleDrawer.astro";
+import Header from "../../../../../components/Header.astro";
+import NavigationDrawer from "../../../../../components/NavigationDrawer.astro";
+import type { GetStaticPaths } from "astro";
 import { Font } from "astro:assets";
 import { getCollection } from "astro:content";
-import type { GetStaticPaths } from "astro";
-import { Icon } from "astro-icon/components";
 
 export const prerender = true;
 export const getStaticPaths = (async () => {
@@ -26,6 +28,12 @@ export const getStaticPaths = (async () => {
     }),
   ];
 }) satisfies GetStaticPaths;
+
+const buttonStyle = [
+  "flex items-center justify-center size-8 text-xl text-subtle",
+  "cursor-pointer bg-transparent border border-hairline rounded-lg",
+  "transition-all duration-[120ms]",
+];
 ---
 
 <html lang="en" class:list={["dark scrollbar-none"]}>
@@ -37,30 +45,143 @@ export const getStaticPaths = (async () => {
     <Font cssVariable="--font-cinzel" preload={true} />
     <Font cssVariable="--font-inter" preload={true} />
   </head>
-  <body class:list={["bg-surface text-ink font-body flex flex-col gap-y-4"]}>
-    <nav class:list={["navigation"]}>
-      <button aria-label="home" type="button">
-        <Icon name="home" />
-      </button>
-
-      <button aria-label="bible" type="button">
-        <Icon name="bible" />
-      </button>
-    </nav>
-    <main class:list={["py-4 px-6 min-h-svh"]}>
-      <h1 class:list={["font-cinzel"]}>
-        {Astro.props.data.bookName} {Astro.props.data.chapterId}
-      </h1>
-      <p class:list={["flex flex-col gap-1"]}>
-        {Object.entries(Astro.props.data.verses).map(([key, value]) => {
+  <body
+    class:list={[
+      "bg-surface text-ink font-body flex flex-col min-h-svh relative",
+    ]}>
+    <Header buttonStyle={buttonStyle} />
+    <NavigationDrawer buttonStyle={buttonStyle} />
+    <BibleDrawer /> 
+    <main class:list={["flex flex-col p-8"]}>
+      <div class:list={["border-b border-hairline"]}>
+        <h1 class:list={["font-cinzel text-ink text-3xl"]}>
+          {Astro.props.data.bookName} {Astro.props.data.chapterId}
+        </h1>
+      </div>
+      <div class:list={["flex flex-col gap-y-3 py-4"]}>
+        {Object.entries(Astro.props.data.verses).map(([verseNum, verse]) => {
           return (
-            <div class:list={["font-scripture"]}>
-              <strong>{key}:</strong>
-              <span set:html={value} />
-            </div>
+            <p class:list={["font-scripture text-ink"]}>
+              <span class:list={["text-subtle underline inline mr-2"]}>
+                Gen {Astro.props.data.bookId}:{verseNum}
+              </span>
+              <span class:list={["inline"]} set:html={verse} />
+            </p>
           );
         })}
-      </p>
+      </div>
     </main>
   </body>
 </html>
+
+<script>
+  // Elements
+  const bibleBtn = document.querySelector(
+    'button[data-trigger="bible drawer"]',
+  );
+  const bibleDrawer = document.querySelector('div[data-target="bible drawer"]');
+  const navigationBtn = document.querySelector(
+    'button[data-trigger="navigation drawer"]',
+  );
+  const navigationDrawer = document.querySelector(
+    'nav[data-target="navigation drawer"]',
+  );
+  const themeBtn = document.querySelector(
+    'button[data-trigger="theme toggle"]',
+  );
+  const themeLightElement = document.querySelector(
+    'span[data-trigger="theme light"]',
+  );
+  const themeDarkElement = document.querySelector(
+    'span[data-trigger="theme dark"]',
+  );
+
+  // Helper function to handle aria states cleanly
+  function updateAriaStates() {
+    if (bibleBtn && bibleDrawer) {
+      const isHidden = bibleDrawer.classList.contains("hidden");
+      bibleBtn.setAttribute("aria-expanded", (!isHidden).toString());
+      bibleBtn.setAttribute("aria-pressed", (!isHidden).toString());
+    }
+
+    if (navigationBtn && navigationDrawer) {
+      const isHidden = navigationDrawer.classList.contains("hidden");
+      navigationBtn.setAttribute("aria-expanded", (!isHidden).toString());
+      navigationBtn.setAttribute("aria-pressed", (!isHidden).toString());
+    }
+  }
+
+  // Bible toggle logic
+  if (bibleBtn && bibleDrawer) {
+    bibleBtn.addEventListener("click", () => {
+      // Close navigation drawer if open
+      if (navigationDrawer && !navigationDrawer.classList.contains("hidden")) {
+        navigationDrawer.classList.add("hidden");
+      }
+
+      bibleDrawer.classList.toggle("hidden");
+      updateAriaStates();
+    });
+  }
+
+  // Navigation toggle logic
+  if (navigationBtn && navigationDrawer) {
+    navigationBtn.addEventListener("click", () => {
+      // Close bible drawer if open
+      if (bibleDrawer && !bibleDrawer.classList.contains("hidden")) {
+        bibleDrawer.classList.add("hidden");
+      }
+
+      navigationDrawer.classList.toggle("hidden");
+      updateAriaStates();
+    });
+  }
+
+  // Theme toggle logic
+  if (themeBtn && themeLightElement && themeDarkElement) {
+    themeBtn.addEventListener("click", () => {
+      const currentTheme = window.localStorage.getItem("theme");
+
+      const applyTheme = (theme: "light" | "dark") => {
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+          document.documentElement.classList.remove("light");
+        } else {
+          document.documentElement.classList.add("light");
+          document.documentElement.classList.remove("dark");
+        }
+      };
+
+      const swapElementVisibility = (
+        elementToShow: Element,
+        elementToHide: Element,
+      ) => {
+        elementToShow.classList.remove("hidden");
+        elementToShow.setAttribute("aria-hidden", "false");
+        elementToHide.classList.add("hidden");
+        elementToHide.setAttribute("aria-hidden", "true");
+      };
+
+      if (!currentTheme) {
+        // If no theme is set, default to dark
+        window.localStorage.setItem("theme", "dark");
+        applyTheme("dark");
+        swapElementVisibility(themeDarkElement, themeLightElement);
+      } else {
+        // If a theme is already set, toggle between light and dark
+        if (currentTheme === "dark") {
+          window.localStorage.setItem("theme", "light");
+          swapElementVisibility(themeLightElement, themeDarkElement);
+        } else {
+          window.localStorage.setItem("theme", "dark");
+          swapElementVisibility(themeDarkElement, themeLightElement);
+        }
+
+        // Apply the new theme immediately
+        const newTheme = window.localStorage.getItem("theme") as
+          "light" | "dark";
+        applyTheme(newTheme);
+      }
+    });
+  }
+</script>

@@ -36,7 +36,7 @@
   },
   "settings": {
     "[astro]": {
-      "editor.defaultFormatter": "biomejs.biome"
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[css]": {
       "editor.defaultFormatter": "biomejs.biome"
@@ -70,7 +70,7 @@
       "**/tools/tsconfigs/**",
       "**/tsconfig.{json,app.json,app.js,js,ts}"
     ],
-    "biome.enabled": true,
+    "biome.enabled": false,
     "biome.lsp.trace.server": "verbose",
     "biome.runFromTemporaryLocation": false,
     "chat.checkpoints.enabled": true,
@@ -191,8 +191,9 @@
       "**/*.yaml",
       "**/*.yml"
     ],
-    "prettier.enable": false,
+    "prettier.enable": true,
     "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
+    "window.zoomLevel": 1.2,
     "workbench.colorTheme": "GitHub Dark Colorblind (Beta)",
     "workbench.iconTheme": "material-icon-theme"
   },
