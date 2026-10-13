@@ -4,7 +4,7 @@ import { defineConfig, fontProviders } from "astro/config";
 import icon from "astro-icon";
 
 export default defineConfig({
-  compressHTML: false,
+  compressHTML: true,
   fonts: [
     {
       cssVariable: "--font-cinzel",
@@ -35,13 +35,14 @@ export default defineConfig({
       iconDir: "./src/assets/icons",
     }),
   ],
+  output: "static",
   trailingSlash: "always",
   vite: {
     resolve: {
       tsconfigPaths: true,
     },
     build: {
-      minify: false,
+      minify: true,
     },
     plugins: [tailwindcss()],
   },

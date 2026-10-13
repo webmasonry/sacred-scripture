@@ -1,78 +1,61 @@
 ---
 import "@/styles/global.css";
 import { Font } from "astro:assets";
-import { getEntry } from "astro:content";
-import type { GetStaticPaths, GetStaticPathsResult } from "astro";
+import { getCollection } from "astro:content";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { Icon } from "astro-icon/components";
-
-interface Props {
-  bookDetails: {
-    chapterCounts: number[];
-    name: string;
-  }[];
-  bookId: number;
-  bookName: string;
-  chapterId: string;
-  translation: "erv" | "hrb";
-  verses: Record<number, string>;
-}
 
 export const prerender = true;
 export const getStaticPaths = (async () => {
-  const generatePathsForTranslations = async (
-    translations: ("hrb" | "erv")[],
+  const translations = ["erv", "hrb"] as const;
+  const generatePathsForTranslation = async (
+    translation: (typeof translations)[number],
   ) => {
-    const pathResults: GetStaticPathsResult = [];
-    for (const translation of translations) {
-      const entry = await getEntry("bible", `${translation}-bible`);
-      if (!entry) continue;
-      const resolveBible = entry.data;
+    const collection = await getCollection(`${translation}-bible`);
 
-      const bookDetails = Object.entries(resolveBible).map(
-        ([name, bookData]) => {
-          const totalChapters =
-            bookData.totalChapterCount || Object.keys(bookData.chapters).length;
-          return {
-            chapterCounts: Array.from(
-              {
-                length: totalChapters,
-              },
-              (_, i) => i + 1,
-            ),
-            name,
-          };
-        },
-      );
+    const metadataEntry = collection.find(
+      (entry) => entry.data.type === "metadata",
+    );
 
-      const dynamicPaths = Object.entries(resolveBible).flatMap(
-        ([bookName, book]) => {
-          return Object.keys(book.chapters).map((chapterNum) => {
-            const currentChapter = book.chapters[Number(chapterNum)];
-            return {
-              params: {
-                translation: translation,
-                book: bookName.toLowerCase(),
-                chapter: String(chapterNum),
-              },
-              props: {
-                bookDetails,
-                bookId: book.bookId,
-                bookName: bookName.toLowerCase(),
-                chapterId: String(chapterNum),
-                translation,
-                verses: currentChapter?.verses || {},
-              } satisfies Props,
-            };
-          });
-        },
-      );
-      pathResults.push(...dynamicPaths);
+    if (metadataEntry?.data.type !== "metadata") {
+      throw new Error(`Missing metadata entry for ${translation} Bible`);
     }
-    return pathResults;
+
+    const { bookNames, chapterNumbersByBook } = metadataEntry.data;
+
+    return collection.flatMap((entry) => {
+      if (entry.data.type !== "chapter") return [];
+      const chapter = entry.data;
+      return [
+        {
+          params: {
+            translation,
+            book: chapter.bookName.toLowerCase(),
+            chapter: String(chapter.chapterId),
+          },
+          props: {
+            _metadata: {
+              bookNames,
+              chapterNumbersByBook,
+            },
+            bookId: chapter.bookId,
+            bookName: chapter.bookName.toLowerCase(),
+            chapterId: String(chapter.chapterId),
+            translation,
+            verses: chapter.verses,
+          },
+        },
+      ];
+    });
   };
 
-  return await generatePathsForTranslations(["hrb"]);
+  const pathsByTranslation = await Promise.all(
+    translations.map(generatePathsForTranslation),
+  );
+  return pathsByTranslation.flat();
 }) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const buttonStyle = [
   "flex items-center justify-center size-8 text-xl text-subtle",
@@ -87,8 +70,8 @@ const buttonStyle = [
     <meta content="width=device-width" name="viewport" />
     <meta content={Astro.generator} name="generator" />
     <title>Sacred Scripture</title>
-    <Font cssVariable="--font-cinzel" preload={true} />
-    <Font cssVariable="--font-inter" preload={true} />
+    <Font cssVariable="--font-cinzel" preload />
+    <Font cssVariable="--font-inter" preload />
 
     <script is:inline>
       const theme = (() => {
@@ -214,7 +197,9 @@ const buttonStyle = [
             return (
               <p class:list={["font-scripture text-ink"]}>
                 <span class:list={["text-subtle underline inline mr-2"]}>
-                  Gen {Astro.props.bookId}:{verseNum}
+                  {Astro.props.bookName.charAt(0).toUpperCase() +
+                    Astro.props.bookName.slice(1, 3)}
+                  {Astro.props.chapterId}:{verseNum}
                 </span>
                 <span class:list={["inline"]} set:html={verse} />
               </p>
@@ -239,7 +224,9 @@ const buttonStyle = [
         Book
       </h1>
       <ul class:list={["flex flex-col gap-y-2 z-0"]}>
-        {Astro.props.bookDetails.map(({ chapterCounts, name }) => {
+        {Astro.props._metadata.bookNames.map((name) => {
+          const chapterCounts =
+            Astro.props._metadata.chapterNumbersByBook[name] ?? [];
           return (
             <li class="w-full shadow shadow-accent-muted/50">
               <details class="group w-full">

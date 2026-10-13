@@ -1,22 +1,15 @@
 import path from "node:path";
 import { BibleModule } from "./modules/bible";
-import type { ESwordExtractBy } from "./types";
 
-interface ESwordOptions<ExtractBy extends ESwordExtractBy> {
-  extractBy: ExtractBy;
+interface ESwordOptions {
   filePath: string;
 }
 
-function eswordLoader<ExtractBy extends ESwordExtractBy>(
-  eswordOptions: ESwordOptions<ExtractBy>,
-) {
+function eswordLoader(eswordOptions: ESwordOptions) {
   switch (path.extname(eswordOptions.filePath)) {
     case ".bbli":
     case ".bblx":
-      return BibleModule.loader(
-        eswordOptions.filePath,
-        eswordOptions.extractBy,
-      );
+      return BibleModule.loader(eswordOptions.filePath);
     default:
       throw new Error(
         `Unsupported e-Sword file extension: ${path.extname(eswordOptions.filePath)}`,

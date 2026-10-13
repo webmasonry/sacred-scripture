@@ -3,26 +3,12 @@ import url from "node:url";
 import type { Loader } from "astro/loaders";
 import { z } from "astro/zod";
 import { BookNameEnum, BookNameUnion } from "../../book-names";
-import type { ESwordExtractBy } from "../../types";
 import { extract } from "./extract";
 import { load } from "./load";
 
-type SchemaByExtract = {
-  bible: typeof BibleModule.schemas.Bible;
-  book: typeof BibleModule.schemas.BibleByBooks;
-  chapter: typeof BibleModule.schemas.BibleByChapters;
-};
-
-function loader<ExtractBy extends ESwordExtractBy>(
+function loader(
   filePath: string,
-  extractBy: ExtractBy,
-): Loader & { schema: SchemaByExtract[ExtractBy] } {
-  const schemas = {
-    bible: BibleModule.schemas.Bible,
-    book: BibleModule.schemas.BibleByBooks,
-    chapter: BibleModule.schemas.BibleByChapters,
-  };
-
+): Loader & { schema: typeof BibleModule.schemas.BibleEntry } {
   return {
     load: async ({ config, store }) => {
       const absolutePath = path.join(url.fileURLToPath(config.root), filePath);
@@ -33,53 +19,35 @@ function loader<ExtractBy extends ESwordExtractBy>(
         ext: path.extname(absolutePath),
         name: path.basename(absolutePath, path.extname(absolutePath)),
       };
-      const data = extract(file, extractBy);
-      load(data, extractBy, file, store);
+      const data = extract(file);
+      load(data, file, store);
     },
     name: "esword-bbl-loader",
-    schema: schemas[extractBy],
-  } satisfies Loader & { schema: SchemaByExtract[ExtractBy] };
+    schema: BibleModule.schemas.BibleEntry,
+  } satisfies Loader & { schema: typeof BibleModule.schemas.BibleEntry };
 }
 
 export const BibleModule = {
   loader: loader,
   schemas: {
-    Bible: z.partialRecord(
-      BookNameEnum,
+    BibleEntry: z.discriminatedUnion("type", [
+      z.object({
+        bookNames: z.array(BookNameUnion),
+        chapterNumbersByBook: z.partialRecord(
+          BookNameEnum,
+          z.array(z.number()),
+        ),
+        type: z.literal("metadata"),
+      }),
       z.object({
         bookId: z.number(),
         bookName: BookNameUnion,
-        chapters: z.record(
-          z.number(),
-          z.object({
-            totalVerseCount: z.number(),
-            verses: z.record(z.number(), z.string()),
-          }),
-        ),
-        totalChapterCount: z.number(),
-        totalChapterVerseCount: z.number(),
+        chapterId: z.number(),
+        totalVerseCount: z.number(),
+        type: z.literal("chapter"),
+        verses: z.record(z.number(), z.string()),
       }),
-    ),
-    BibleByBooks: z.object({
-      bookId: z.number(),
-      bookName: BookNameUnion,
-      chapters: z.record(
-        z.number(),
-        z.object({
-          totalVerseCount: z.number(),
-          verses: z.record(z.number(), z.string()),
-        }),
-      ),
-      totalChapterCount: z.number(),
-      totalChapterVerseCount: z.number(),
-    }),
-    BibleByChapters: z.object({
-      bookId: z.number(),
-      bookName: BookNameUnion,
-      chapterId: z.number(),
-      totalVerseCount: z.number(),
-      verses: z.record(z.number(), z.string()),
-    }),
+    ]),
     BibleTableRow: z.object({
       Book: z.number(),
       Chapter: z.number(),
@@ -102,14 +70,10 @@ export const BibleModule = {
 } as const;
 
 export namespace BibleModule {
-  export type Bible = z.infer<typeof BibleModule.schemas.Bible>;
-  export type BibleByBooks = z.infer<typeof BibleModule.schemas.BibleByBooks>;
-  export type BibleByChapters = z.infer<
-    typeof BibleModule.schemas.BibleByChapters
-  >;
-
+  export type BibleEntry = z.infer<typeof BibleModule.schemas.BibleEntry>;
+  export type BibleMetadata = Extract<BibleEntry, { type: "metadata" }>;
+  export type BibleChapter = Extract<BibleEntry, { type: "chapter" }>;
   export type BibleTableRow = z.infer<typeof BibleModule.schemas.BibleTableRow>;
-
   export type DetailTableRow = z.infer<
     typeof BibleModule.schemas.DetailTableRow
   >;

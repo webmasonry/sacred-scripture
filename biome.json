@@ -44,6 +44,7 @@
   "files": {
     "ignoreUnknown": true,
     "includes": [
+      "!./tmp",
       "**/*.astro",
       "**/*.css",
       "**/*.html",
@@ -193,6 +194,9 @@
           }
         }
       },
+      "formatter": {
+        "enabled": false
+      },
       "includes": ["**/*.astro"],
       "linter": {
         "rules": {
@@ -208,9 +212,15 @@
       }
     },
     {
+      "formatter": {
+        "enabled": false
+      },
       "includes": ["**/*.css"]
     },
     {
+      "formatter": {
+        "enabled": false
+      },
       "includes": ["**/*.html"]
     },
     {
@@ -221,21 +231,39 @@
           }
         }
       },
+      "formatter": {
+        "enabled": false
+      },
       "includes": ["**/*.json"]
     },
     {
+      "formatter": {
+        "enabled": false
+      },
       "includes": ["**/*.svelte"]
     },
     {
+      "formatter": {
+        "enabled": false
+      },
       "includes": ["**/*.ts"]
     },
     {
+      "formatter": {
+        "enabled": false
+      },
       "includes": ["**/*.d.ts"]
     },
     {
+      "formatter": {
+        "enabled": false
+      },
       "includes": ["**/*.tsx"]
     },
     {
+      "formatter": {
+        "enabled": false
+      },
       "includes": ["**/*.vue"]
     }
   ],

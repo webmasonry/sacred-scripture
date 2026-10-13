@@ -7,5 +7,3 @@ export interface ESwordFile {
 }
 
 export type ESwordFileExtension = ".bbli" | ".bblx";
-
-export type ESwordExtractBy = "bible" | "book" | "chapter";
