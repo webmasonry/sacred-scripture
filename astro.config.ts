@@ -11,6 +11,7 @@ export default defineConfig({
       display: "swap",
       fallbacks: ["Georgia", "serif"],
       name: "Cinzel Variable",
+      optimizedFallbacks: true,
       options: { package: "@fontsource-variable/cinzel" },
       provider: fontProviders.npm({ remote: false }),
       styles: ["normal"],
@@ -22,6 +23,7 @@ export default defineConfig({
       display: "swap",
       fallbacks: ["Arial", "sans-serif"],
       name: "Inter Variable",
+      optimizedFallbacks: true,
       options: { package: "@fontsource-variable/inter" },
       provider: fontProviders.npm({ remote: false }),
       styles: ["normal"],
@@ -38,12 +40,12 @@ export default defineConfig({
   output: "static",
   trailingSlash: "always",
   vite: {
-    resolve: {
-      tsconfigPaths: true,
-    },
     build: {
       minify: true,
     },
     plugins: [tailwindcss()],
+    resolve: {
+      tsconfigPaths: true,
+    },
   },
 });

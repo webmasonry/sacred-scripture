@@ -1,0 +1,104 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  bookName: string;
+  chapterId: string;
+  metadata: {
+    bookNames: string[];
+    chapterNumbersByBook: Record<string, number[]>;
+  };
+  styles: {
+    buttons: string;
+    headerSizeAdjustment: string;
+  };
+  translation: string;
+}
+
+const translations = [
+  { code: "erv", name: "ERV" },
+  { code: "hrb", name: "HRB" },
+] as const;
+---
+
+<aside
+  aria-label="Bible Drawer"
+  data-target="bible drawer"
+  id="bible-drawer"
+  role="dialog"
+  class:list={[
+    "fixed top-[57px] bottom-0 h-[calc(100svh-57px)] bg-element z-10 overflow-y-auto flex-col gap-y-2 w-full scrollbar-none hidden border-l border-hairline",
+  ]}>
+  <!-- Translation Section -->
+  <details class="group w-full">
+    <summary class="flex items-center justify-between cursor-pointer list-none select-none font-cinzel text-ink text-2xl border-b border-hairline pt-2.5 pb-1 px-2 z-10 shadow shadow-accent-muted">
+      <span>Translations</span>
+      <span class="transition-transform duration-200 group-open:rotate-180">
+        <Icon name="lucide:chevron-down" />
+      </span>
+    </summary>
+    <ul class="flex flex-col gap-y-2 border-b border-hairline p-2">
+      {translations.map(({ code, name }) => {
+        const href = `/reader/${code}/${Astro.props.bookName}/${Astro.props.chapterId}/`;
+        return (
+          <li>
+            <a
+              aria-current={
+                Astro.props.translation === code ? "page" : undefined
+              }
+              class:list={[
+                "block rounded p-2 font-cinzel text-lg",
+                Astro.props.translation === code
+                  ? "bg-accent-muted/20 text-ink"
+                  : "text-subtle hover:bg-accent-muted/10",
+              ]}
+              href={href}>
+              {name}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </details>
+
+  <!-- Books Section -->
+  <h1
+    class:list={[
+      "font-cinzel text-ink text-2xl border-b border-hairline pt-2.5 pb-1 px-2 z-10 shadow shadow-accent-muted",
+    ]}>
+    Books
+  </h1>
+  <ul class:list={["flex flex-col gap-y-2 z-0"]}>
+    {Astro.props.metadata.bookNames.map((name) => {
+      const chapterCounts =
+        Astro.props.metadata.chapterNumbersByBook[name] ?? [];
+      return (
+        <li class="w-full shadow shadow-accent-muted/50">
+          <details class="group w-full">
+            <summary class="flex items-center justify-between cursor-pointer list-none p-2 text-lg font-cinzel text-ink select-none">
+              <span>{name}</span>
+              <span class="transition-transform duration-200 group-open:rotate-180">
+                <Icon name="lucide:chevron-down" />
+              </span>
+            </summary>
+
+            <div class="px-2 pb-3 pt-1 text-sm bg-accent-muted/10 border-t border-accent-muted/20 flex flex-wrap gap-2">
+              {chapterCounts.map((count) => {
+                const href = `/reader/${Astro.props.translation}/${name.toLowerCase()}/${count}/`;
+                return (
+                  <a
+                    class:list={
+                      "px-2 py-1 bg-accent-muted/20 rounded size-8 flex justify-center items-center"
+                    }
+                    href={href}>
+                    {count}
+                  </a>
+                );
+              })}
+            </div>
+          </details>
+        </li>
+      );
+    })}
+  </ul>
+</aside>
